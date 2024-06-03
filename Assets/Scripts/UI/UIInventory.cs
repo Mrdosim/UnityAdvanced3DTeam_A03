@@ -200,6 +200,12 @@ public class UIInventory : MonoBehaviour
 					case ConsumableType.Hunger:
 						condition.Eat(selectedItem.consumables[i].value);
 						break;
+					case ConsumableType.Thirst:
+						condition.Drink(selectedItem.consumables[i].value);
+						break;
+					case ConsumableType.Warmth:
+						condition.Heated(selectedItem.consumables[i].value);
+						break;
 				}
 			}
 			RemoveSelectedItem();
