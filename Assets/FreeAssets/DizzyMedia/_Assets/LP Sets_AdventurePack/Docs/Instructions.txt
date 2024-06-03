@@ -1,0 +1,5 @@
+In order to get the same look as the product page images/videos you need to change your Color Space to Linear and import post processing from the package manager.
+
+Animations shown in the video/images can be downloaded here:
+
+https://drive.google.com/file/d/1jmEnKxslWOfJBt3_Zz69ChRWdDu7E62l/view?usp=sharing

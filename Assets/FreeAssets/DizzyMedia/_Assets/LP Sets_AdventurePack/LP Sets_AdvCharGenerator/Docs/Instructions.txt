@@ -1,0 +1,1 @@
+In order to use this asset correctly you MUST have Low Poly Sets | Adventure Characters or Adventure Pack imported into the project.
