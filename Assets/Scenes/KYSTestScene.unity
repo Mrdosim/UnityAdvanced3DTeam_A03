@@ -8171,7 +8171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 0
-  fullDayLength: 30
+  fullDayLength: 3000
   startTime: 0.4
   noon: {x: 90, y: 0, z: 0}
   sun: {fileID: 705507994}
@@ -32535,6 +32535,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 6
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -32616,6 +32617,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1090070593}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 067492b15cbd82b48a4c90f926684c88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objects:
+  - name: Floor
+    prefab: {fileID: 990407309289087857, guid: d775eb937643a9a49b6a724347d9561e, type: 3}
+    preview: {fileID: 5531183173143659778, guid: 88f224f9a12ebb74094d238514134c26, type: 3}
+    gold: 0
+  - name: Wall
+    prefab: {fileID: 990407309289087857, guid: 60ef3ac4f6b2fb046839b92f83191dfd, type: 3}
+    preview: {fileID: 5531183173143659778, guid: d30b10709bf410a4196c8e242155cd92, type: 3}
+    gold: 0
+  currentObject:
+    name: 
+    prefab: {fileID: 0}
+    preview: {fileID: 0}
+    gold: 0
+  currentPreview: {fileID: 0}
+  cam: {fileID: 963194228}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 6071
+  offset: 0.1
+  gridSize: 0.1
+  rotationSpeed: 10
+  isBuilding: 1
 --- !u!1 &964062821
 GameObject:
   m_ObjectHideFlags: 0

@@ -127,13 +127,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae2d4aa02240cc4facfeb3d5f9c7f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foundation: 1
   col: []
   green: {fileID: 2100000, guid: 2e3fe719eece0ce45a47859435eb62b9, type: 2}
   red: {fileID: 2100000, guid: 66b58e89bf028224cbb736d6be2c8539, type: 2}
   isBuildable: 0
-  placeableLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   graphics: {fileID: 8564441434610053248}
 --- !u!1 &5746460929673692807
 GameObject:

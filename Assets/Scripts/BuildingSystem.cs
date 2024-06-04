@@ -32,11 +32,21 @@ public class BuildingSystem : MonoBehaviour
         if (isBuilding)
         {
             StartPreview();
+            RotatePreview();
         }
 
         if (Input.GetMouseButtonDown(0))
         {
             Build();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ChangeBuildingObject(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ChangeBuildingObject(1);
         }
     }
 
@@ -78,7 +88,29 @@ public class BuildingSystem : MonoBehaviour
         PreviewObject PO = currentPreview.GetComponent<PreviewObject>();
         if (PO != null && PO.isBuildable)
         {
-            Instantiate(currentObject.prefab, currentPosition, Quaternion.identity);
+            Instantiate(currentObject.prefab, currentPosition, currentPreview.rotation);
+        }
+    }
+
+    public void ChangeBuildingObject(int index)
+    {
+        if (index >= 0 && index < objects.Count)
+        {
+            currentObject = objects[index];
+            ChangeCurrentBuilding();
+        }
+    }
+
+    public void RotatePreview()
+    {
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+        if (scrollInput > 0)
+        {
+            currentPreview.Rotate(Vector3.up, 90, Space.World);
+        }
+        else if (scrollInput < 0)
+        {
+            currentPreview.Rotate(Vector3.up, -90, Space.World);
         }
     }
 }

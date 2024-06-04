@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,16 +9,8 @@ public class PreviewObject : MonoBehaviour
     public Material red;
     public bool isBuildable;
 
-    private MeshRenderer meshRenderer;
+    public Transform graphics;
 
-    private void Start()
-    {
-        meshRenderer = GetComponent<MeshRenderer>();
-        if (meshRenderer == null)
-        {
-            Debug.LogError("MeshRenderer not found!");
-        }
-    }
 
     private void Update()
     {
@@ -28,7 +19,7 @@ public class PreviewObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 10 && foundation)
+        if (other.gameObject.layer == 10)
         {
             col.Add(other);
         }
@@ -36,7 +27,7 @@ public class PreviewObject : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == 10 && foundation)
+        if (other.gameObject.layer == 10)
         {
             col.Remove(other);
         }
@@ -46,10 +37,19 @@ public class PreviewObject : MonoBehaviour
     {
         isBuildable = col.Count == 0;
 
-        if (meshRenderer != null)
+        if ( isBuildable)
         {
-            Material newMaterial = isBuildable ? new Material(green) : new Material(red);
-            meshRenderer.material = newMaterial;
+            foreach (Transform child in graphics)
+            {
+                child.GetComponent<Renderer>().material = green;
+            }
+        }
+        else
+        {
+            foreach(Transform child in graphics)
+            {
+                child.GetComponent<Renderer>().material = red;
+            }
         }
     }
 }
