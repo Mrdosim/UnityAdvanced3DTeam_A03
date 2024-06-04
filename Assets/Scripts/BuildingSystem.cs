@@ -81,6 +81,15 @@ public class BuildingSystem : MonoBehaviour
         currentPosition *= gridSize;
         currentPosition += Vector3.one * offset;
         currentPreview.position = currentPosition;
+
+        if (hit2.transform.CompareTag("BuildObject"))
+        {
+            float objectWidth = currentObject.prefab.GetComponent<Collider>().bounds.size.x;
+            float objectHeight = currentObject.prefab.GetComponent<Collider>().bounds.size.y;
+            float hitObjectHeight = hit2.transform.GetComponent<Collider>().bounds.size.y;
+            currentPosition.y = hit2.transform.position.y + hitObjectHeight + objectHeight;
+            currentPreview.position = currentPosition;
+        }
     }
 
     public void Build()

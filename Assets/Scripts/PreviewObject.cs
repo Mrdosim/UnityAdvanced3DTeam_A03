@@ -3,18 +3,22 @@ using UnityEngine;
 
 public class PreviewObject : MonoBehaviour
 {
-    public bool foundation;
     public List<Collider> col = new List<Collider>();
+    public ObjectSort sort;
     public Material green;
     public Material red;
     public bool isBuildable;
 
-    public Transform graphics;
+    public bool second;
 
+    public PreviewObject childcol;
+
+    public Transform graphics;
 
     private void Update()
     {
-        ChangeColor();
+        if (!second)
+            ChangeColor();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,6 +26,7 @@ public class PreviewObject : MonoBehaviour
         if (other.gameObject.layer == 10)
         {
             col.Add(other);
+            UpdateBuildableState();
         }
     }
 
@@ -30,14 +35,27 @@ public class PreviewObject : MonoBehaviour
         if (other.gameObject.layer == 10)
         {
             col.Remove(other);
+            UpdateBuildableState();
+        }
+    }
+
+    private void UpdateBuildableState()
+    {
+        if (sort == ObjectSort.Floor)
+        {
+            isBuildable = col.Count == 0;
+        }
+        else
+        {
+            isBuildable = col.Count == 0 && childcol.col.Count > 0;
         }
     }
 
     public void ChangeColor()
     {
-        isBuildable = col.Count == 0;
+        UpdateBuildableState();
 
-        if ( isBuildable)
+        if (isBuildable)
         {
             foreach (Transform child in graphics)
             {
@@ -46,10 +64,18 @@ public class PreviewObject : MonoBehaviour
         }
         else
         {
-            foreach(Transform child in graphics)
+            foreach (Transform child in graphics)
             {
                 child.GetComponent<Renderer>().material = red;
             }
         }
     }
+}
+
+public enum ObjectSort
+{
+    Normal,
+    Floor,
+    Wall,
+    Roof
 }
