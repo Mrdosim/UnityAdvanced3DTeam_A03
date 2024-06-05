@@ -72,7 +72,7 @@ public class EquipTool : Equip
 
 		if(Physics.Raycast(ray, out hit, AttackDistance))
 		{
-
+			hit.collider.GetComponent<IDamagable>().
 		}
 
 		if (targetLayer == _creatureLayer)
