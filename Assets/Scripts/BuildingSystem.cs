@@ -18,6 +18,8 @@ public class BuildingSystem : MonoBehaviour
 
     public bool isBuilding;
 
+    public MCFace dir;
+
     private void Start()
     {
         currentObject = objects[0];
@@ -74,22 +76,43 @@ public class BuildingSystem : MonoBehaviour
 
     public void ShowPreview(RaycastHit hit2)
     {
-        currentPosition = hit2.point;
+        if (currentObject.sort == ObjectSort.Floor)
+        {
+            dir = GetHitFace(hit2);
+            if (dir == MCFace.Up || dir == MCFace.Down)
+            {
+                currentPosition = hit2.point;
+            }
+            else
+            {
+                if (dir == MCFace.North)
+                {
+                    currentPosition = hit2.point + new Vector3(0, 0, 0.5f);
+                }
+                if (dir == MCFace.South)
+                {
+                    currentPosition = hit2.point + new Vector3(0, 0, -0.5f);
+                }
+                if (dir == MCFace.East)
+                {
+                    currentPosition = hit2.point + new Vector3(0.5f, 0,0 );
+                }
+                if (dir == MCFace.West)
+                {
+                    currentPosition = hit2.point + new Vector3(-0.5f, 0, 0);
+                }
+            }
+        }
+        else
+        {
+            currentPosition = hit2.point;
+        }
         currentPosition -= Vector3.one * offset;
         currentPosition /= gridSize;
         currentPosition = new Vector3(Mathf.Round(currentPosition.x), Mathf.Round(currentPosition.y), Mathf.Round(currentPosition.z));
         currentPosition *= gridSize;
         currentPosition += Vector3.one * offset;
         currentPreview.position = currentPosition;
-
-        if (hit2.transform.CompareTag("BuildObject"))
-        {
-            float objectWidth = currentObject.prefab.GetComponent<Collider>().bounds.size.x;
-            float objectHeight = currentObject.prefab.GetComponent<Collider>().bounds.size.y;
-            float hitObjectHeight = hit2.transform.GetComponent<Collider>().bounds.size.y;
-            currentPosition.y = hit2.transform.position.y + hitObjectHeight + objectHeight;
-            currentPreview.position = currentPosition;
-        }
     }
 
     public void Build()
@@ -122,6 +145,38 @@ public class BuildingSystem : MonoBehaviour
             currentPreview.Rotate(Vector3.up, -90, Space.World);
         }
     }
+
+    public static MCFace GetHitFace(RaycastHit hit)
+    {
+        Vector3 incomingVec = hit.normal - Vector3.up;
+
+        if (incomingVec == new Vector3(0, -1, -1))
+        {
+            return MCFace.South;
+        }
+        if (incomingVec == new Vector3(0, -1, 1))
+        {
+            return MCFace.North;
+        }
+        if (incomingVec == new Vector3(0, 0, 0))
+        {
+            return MCFace.Up;
+        }
+        if (incomingVec == new Vector3(1, 1, 1))
+        {
+            return MCFace.Down;
+        }
+        if (incomingVec == new Vector3(-1, -1, 0))
+        {
+            return MCFace.West;
+        }
+        if (incomingVec == new Vector3(1, -1, 0))
+        {
+            return MCFace.East;
+        }
+
+        return MCFace.None;
+    }
 }
 
 [System.Serializable]
@@ -129,6 +184,18 @@ public class buildObjects
 {
     public string name;
     public GameObject prefab;
+    public ObjectSort sort;
     public GameObject preview;
     public int gold;
+}
+
+public enum MCFace
+{
+    None,
+    Up,
+    Down,
+    East,
+    West,
+    North,
+    South
 }

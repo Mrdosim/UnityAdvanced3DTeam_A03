@@ -43,13 +43,16 @@ public class PreviewObject : MonoBehaviour
     {
         if (sort == ObjectSort.Floor)
         {
-            isBuildable = col.Count == 0;
+            // Floor 객체는 다른 객체가 없어도 쌓을 수 있도록 예외 처리
+            isBuildable = col.Count == 0 || (childcol != null && childcol.col.Count > 0);
         }
         else
         {
-            isBuildable = col.Count == 0 && childcol.col.Count > 0;
+            // 다른 객체는 childcol 조건을 따르도록 수정
+            isBuildable = col.Count == 0 && (childcol != null && childcol.col.Count > 0);
         }
     }
+
 
     public void ChangeColor()
     {

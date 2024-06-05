@@ -242,7 +242,7 @@ MonoBehaviour:
   red: {fileID: 2100000, guid: 66b58e89bf028224cbb736d6be2c8539, type: 2}
   isBuildable: 0
   second: 1
-  childcol: {fileID: 0}
+  childcol: {fileID: 4204279430719831116}
   graphics: {fileID: 0}
 --- !u!65 &7021423530139327194
 BoxCollider:
@@ -263,5 +263,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.05, z: 1}
-  m_Center: {x: 0, y: 0.025, z: 0}
+  m_Size: {x: 1, y: 0.06, z: 1}
+  m_Center: {x: 0, y: 0.01, z: 0}
