@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Action
+
+  - BuildObject
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,6 @@ TagManager:
   - Wood
   - Creature
   - Mineral
-  - 
   - 
   - 
   - 

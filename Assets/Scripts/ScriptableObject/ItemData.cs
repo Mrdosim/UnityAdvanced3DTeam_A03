@@ -5,7 +5,8 @@ public enum ItemType
 {
 	Equipable,
 	Consumable,
-	Resource
+	Resource,
+	Buildable
 }
 
 public enum ConsumableType
@@ -43,4 +44,8 @@ public class ItemData : ScriptableObject
 	[Header("Equip")]
 	public GameObject equipPrefab;
 
+	[Header("Buildable")]
+	public GameObject buildPrefab;
+	public GameObject previewPrefab;
+	public ObjectSort sort;
 }
