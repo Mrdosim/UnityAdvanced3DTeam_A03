@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4034819114770881893}
   - component: {fileID: -3960109514319010857}
   - component: {fileID: -4677441871144998846}
+  - component: {fileID: 7380490255247173396}
   m_Layer: 8
   m_Name: Equip_Sword
   m_TagString: Untagged
@@ -47,11 +48,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRate: 0.8
-  attackDistance: 1
   useStamina: 15
-  doesGatherResources: 0
-  doesDealDamge: 1
-  damage: 10
+  onCreatureDamage: 10
+  onWoodDamage: 5
+  onMineralDamage: 2
 --- !u!95 &-4677441871144998846
 Animator:
   serializedVersion: 5
@@ -73,6 +73,27 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &7380490255247173396
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3403032616962760183}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.12, y: 0.4, z: 0.12}
+  m_Center: {x: 0.35, y: -0.1, z: 0.67}
 --- !u!1 &8906966454030799341
 GameObject:
   m_ObjectHideFlags: 0

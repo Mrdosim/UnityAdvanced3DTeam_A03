@@ -13,7 +13,8 @@ public enum AIState
 public class NPC : MonoBehaviour, IDamagable
 {
 	[Header("Stats")]
-	public int health;
+	public int MaxHealth;
+	int currentHealth;
 	public float walkSpeed;
 	public float runSpeed;
 	public ItemData[] dropOnDeath;
@@ -47,6 +48,7 @@ public class NPC : MonoBehaviour, IDamagable
 		agent = GetComponent<NavMeshAgent>();
 		animator = GetComponent<Animator>();
 		meshRenderer = GetComponentsInChildren<SkinnedMeshRenderer>();
+		currentHealth = MaxHealth;
 	}
 
 	private void Start()
@@ -182,21 +184,20 @@ public class NPC : MonoBehaviour, IDamagable
 
 	public void TakePhysicalDamage(int damage)
 	{
-		health -= damage;
-		if(health <= 0)
+		currentHealth -= damage;
+		if(currentHealth <= 0)
 		{
 			Die();
 		}
 
 		StartCoroutine(DamageFlash());
-
 	}
 
 	void Die()
 	{
 		for(int i = 0; i < dropOnDeath.Length; i++)
 		{
-			Instantiate(dropOnDeath[i].dropProefab, transform.position + Vector3.up * 2, Quaternion.identity);
+			Instantiate(dropOnDeath[i].dropPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
 		}
 
 		Destroy(gameObject);
@@ -215,5 +216,10 @@ public class NPC : MonoBehaviour, IDamagable
 		{
 			meshRenderer[i].material.color = Color.white;
 		}
+	}
+
+	public float GetHealthRatio()
+	{
+		return currentHealth / MaxHealth;
 	}
 }

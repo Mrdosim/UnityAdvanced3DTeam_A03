@@ -19,7 +19,7 @@ public class Condition : MonoBehaviour
 		uiBar.fillAmount = GetPercentage();
 	}
 
-	float GetPercentage()
+	public float GetPercentage()
 	{
 		return curValue / maxValue;
 	}
