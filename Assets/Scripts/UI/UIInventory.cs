@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,17 +24,22 @@ public class UIInventory : MonoBehaviour
 
 	private PlayerController controller;
 	private PlayerCondition condition;
+	private BuildingSystem buildingSystem;
 
 	ItemData selectedItem;
 	int selectedItemIndex = 0;
 
 	int curEquipIndex;
 
+	public List<ItemData> TestItems;
+
 	private void Start()
 	{
 		controller = CharacterManager.Instance.Player.Controller;
 		condition = CharacterManager.Instance.Player.Condition;
 		dropPosition = CharacterManager.Instance.Player.dropPosition;
+		buildingSystem = CharacterManager.Instance.Player.buildingSystem;
+		buildingSystem.inventory = this;
 
 		controller.inventory += Toggle;
 		CharacterManager.Instance.Player.addItem += AddItem;
@@ -54,6 +60,8 @@ public class UIInventory : MonoBehaviour
 		}
 
 		ClearSelectedItemWindow();
+
+		AddTestItem();
 	}
 
 	void ClearSelectedItemWindow()
@@ -180,7 +188,7 @@ public class UIInventory : MonoBehaviour
 			selectedItemStatValue.text += selectedItem.consumables[i].value.ToString() + "\n";
 		}
 
-		useButton.SetActive(selectedItem.type == ItemType.Consumable);
+		useButton.SetActive(selectedItem.type == ItemType.Consumable || selectedItem.type == ItemType.Buildable);
 		equipButton.SetActive(selectedItem.type == ItemType.Equipable && !slots[index].equipped);
 		unequipButton.SetActive(selectedItem.type == ItemType.Equipable && slots[index].equipped);
 		dropButton.SetActive(true);
@@ -204,6 +212,15 @@ public class UIInventory : MonoBehaviour
 			}
 			RemoveSelectedItem();
 		}
+		else if(selectedItem.type == ItemType.Buildable)
+		{
+			buildingSystem.isBuilding = true;
+            buildingSystem.selectedItem = selectedItem;
+            buildingSystem.ChangeCurrentBuilding(selectedItem); // 현재 건축 객체 변경
+			RemoveSelectedItem();
+			controller.ToggleCursor();
+            inventoryWindow.SetActive(false);
+		}
 	}
 
 	public void OnDropButton()
@@ -212,7 +229,7 @@ public class UIInventory : MonoBehaviour
 		RemoveSelectedItem();
 	}
 
-	void RemoveSelectedItem()
+	public void RemoveSelectedItem()
 	{
 		slots[selectedItemIndex].quantity--;
 		if(slots[selectedItemIndex].quantity <= 0)
@@ -226,7 +243,16 @@ public class UIInventory : MonoBehaviour
 		UpdateUI();
 	}
 
-	public void OnEquipButton()
+    public void RestoreSelectedItem()
+    {
+        if (selectedItemIndex >= 0 && selectedItemIndex < slots.Length)
+        {
+            slots[selectedItemIndex].quantity++;
+            UpdateUI();
+        }
+    }
+
+    public void OnEquipButton()
 	{
 		if (slots[curEquipIndex].equipped)
 		{
@@ -255,5 +281,20 @@ public class UIInventory : MonoBehaviour
 	public void OnUnEquipButton()
 	{
 		UnEquip(selectedItemIndex);
+	}
+
+	void AddTestItem()
+	{
+		foreach (ItemData item in TestItems)
+		{
+			ItemSlot emptySlot = GetEmptySlot();
+
+			if (emptySlot != null)
+			{
+				emptySlot.item = item;
+				emptySlot.quantity = 10;
+			}
+		}
+		UpdateUI();
 	}
 }

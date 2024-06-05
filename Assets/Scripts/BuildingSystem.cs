@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BuildingSystem : MonoBehaviour
 {
-    public List<buildObjects> objects = new List<buildObjects>();
-    public buildObjects currentObject;
+    //public List<buildObjects> objects = new List<buildObjects>();
+    //public buildObjects currentObject;
     private Vector3 currentPosition;
     public Transform currentPreview;
 
@@ -19,47 +19,36 @@ public class BuildingSystem : MonoBehaviour
     public bool isBuilding;
 
     public MCFace dir;
-
-    private void Start()
-    {
-        currentObject = objects[0];
-        ChangeCurrentBuilding();
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+    public UIInventory inventory;
+    public ItemData selectedItem;
 
     private void Update()
     {
         if (isBuilding)
         {
+            if (currentPreview == null && selectedItem != null)
+            {
+                ChangeCurrentBuilding(selectedItem);
+            }
+
             StartPreview();
             RotatePreview();
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && currentPreview != null)
         {
             Build();
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            ChangeBuildingObject(0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            ChangeBuildingObject(1);
-        }
     }
 
-    public void ChangeCurrentBuilding()
+    public void ChangeCurrentBuilding(ItemData item)
     {
         if (currentPreview != null)
         {
             Destroy(currentPreview.gameObject);
         }
 
-        GameObject curPrev = Instantiate(currentObject.preview, currentPosition, Quaternion.identity) as GameObject;
+        GameObject curPrev = Instantiate(item.previewPrefab, currentPosition, Quaternion.identity) as GameObject;
         currentPreview = curPrev.transform;
     }
 
@@ -76,7 +65,7 @@ public class BuildingSystem : MonoBehaviour
 
     public void ShowPreview(RaycastHit hit2)
     {
-        if (currentObject.sort == ObjectSort.Floor)
+        if (selectedItem.sort == ObjectSort.Floor)
         {
             dir = GetHitFace(hit2);
             if (dir == MCFace.Up || dir == MCFace.Down)
@@ -95,7 +84,7 @@ public class BuildingSystem : MonoBehaviour
                 }
                 if (dir == MCFace.East)
                 {
-                    currentPosition = hit2.point + new Vector3(0.5f, 0,0 );
+                    currentPosition = hit2.point + new Vector3(0.5f, 0, 0);
                 }
                 if (dir == MCFace.West)
                 {
@@ -120,17 +109,17 @@ public class BuildingSystem : MonoBehaviour
         PreviewObject PO = currentPreview.GetComponent<PreviewObject>();
         if (PO != null && PO.isBuildable)
         {
-            Instantiate(currentObject.prefab, currentPosition, currentPreview.rotation);
+            Instantiate(selectedItem.buildPrefab, currentPosition, currentPreview.rotation);
+            isBuilding = false; // 건축 모드 종료
+            Destroy(currentPreview.gameObject); // 미리보기 객체 제거
         }
     }
 
-    public void ChangeBuildingObject(int index)
+    public void CancelBuilding()
     {
-        if (index >= 0 && index < objects.Count)
-        {
-            currentObject = objects[index];
-            ChangeCurrentBuilding();
-        }
+        isBuilding = false;
+        Destroy(currentPreview.gameObject);
+        inventory.RestoreSelectedItem();
     }
 
     public void RotatePreview()
@@ -179,15 +168,15 @@ public class BuildingSystem : MonoBehaviour
     }
 }
 
-[System.Serializable]
-public class buildObjects
-{
-    public string name;
-    public GameObject prefab;
-    public ObjectSort sort;
-    public GameObject preview;
-    public int gold;
-}
+//[System.Serializable]
+//public class buildObjects
+//{
+//    public string name;
+//    public GameObject prefab;
+//    public ObjectSort sort;
+//    public GameObject preview;
+//    public int gold;
+//}
 
 public enum MCFace
 {
