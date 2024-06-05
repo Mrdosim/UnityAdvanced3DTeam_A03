@@ -15,7 +15,7 @@ public class Interaction : MonoBehaviour
 	private IInteractable curInteractable;
 
 	public TextMeshProUGUI promtText;
-	private Camera camera;
+	private new Camera camera;
 
 	private void Start()
 	{

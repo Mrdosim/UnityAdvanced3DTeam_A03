@@ -1,26 +1,31 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class EquipTool : Equip
 {
 	public float attackRate;
 	private bool attacking;
-	public float attackDistance;
 	public float useStamina;
 
-	[Header("Resource Gathering")]
-	public bool doesGatherResources;
-
 	[Header("Combat")]
-	public bool doesDealDamge;
-	public int damage;
+	public int onCreatureDamage;
+	public int onWoodDamage;
+	public int onMineralDamage;
+	private bool isAttack = false;
 
 	private Animator animator;
-	private Camera camera;
+	private new Camera camera;
+	private int _creatureLayer;
+	private int _woodLayer;
+	private int _mineralLayer;
 
 	private void Start()
 	{
 		animator = GetComponent<Animator>();
 		camera = Camera.main;
+		_creatureLayer = LayerMask.NameToLayer("Creature");
+		_woodLayer = LayerMask.NameToLayer("Wood");
+		_mineralLayer = LayerMask.NameToLayer("Mineral");
 	}
 
 	public override void OnAttackInput()
@@ -28,6 +33,7 @@ public class EquipTool : Equip
 		base.OnAttackInput();
 		if(!attacking)
 		{
+			isAttack = true;
 			if (CharacterManager.Instance.Player.Condition.UseStamina(useStamina))
 			{
 				attacking = true;
@@ -40,20 +46,40 @@ public class EquipTool : Equip
 	void OnCanAttack()
 	{
 		attacking = false;
+		isAttack = false;
 	}
 
-	public void OnHit()
+	private void OnTriggerEnter(Collider other)
 	{
-		Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-		RaycastHit hit;
-
-		if(Physics.Raycast(ray, out hit, attackDistance))
+		if (isAttack)
 		{
-			if(doesGatherResources && hit.collider.TryGetComponent(out Resource resource))
+			other.TryGetComponent(out IDamagable target);
+			int targetLayer = other.gameObject.layer;
+			if (target != null)
 			{
-				resource.Gather(hit.point, hit.normal);
+				OnHit(target, targetLayer);
 			}
+			isAttack = false;
 		}
+	}
+
+	public  void OnHit(IDamagable target, int targetLayer)
+	{
+		if (targetLayer == _creatureLayer)
+		{
+			target.TakePhysicalDamage(onCreatureDamage);
+		}
+		else if (targetLayer == _woodLayer)
+		{
+			target.TakePhysicalDamage(onWoodDamage);
+		}
+		else if (targetLayer == _mineralLayer)
+		{
+			target.TakePhysicalDamage(onMineralDamage);
+		}
+
+		//적 체력 UI에 표시
+		CharacterManager.Instance.Player.Condition.EnemyHealthUIUpdate(target.GetHealthRatio());
 	}
 
 }

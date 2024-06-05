@@ -33,7 +33,8 @@ public class UIInventory : MonoBehaviour
 
 	public List<ItemData> TestItems;
 
-	private void Start()
+	public void Initialize()
+
 	{
 		controller = CharacterManager.Instance.Player.Controller;
 		condition = CharacterManager.Instance.Player.Condition;
@@ -41,18 +42,16 @@ public class UIInventory : MonoBehaviour
 		buildingSystem = CharacterManager.Instance.Player.buildingSystem;
 		buildingSystem.inventory = this;
 
-		controller.inventory += Toggle;
 		CharacterManager.Instance.Player.addItem += AddItem;
 
-		inventoryWindow.SetActive(false);
-		for(int i = 0;i < slotNum; i++)
+		for (int i = 0; i < slotNum; i++)
 		{
-			Instantiate(SlotPrefab, slotPanel).transform.SetParent(slotPanel) ;
+			Instantiate(SlotPrefab, slotPanel).transform.SetParent(slotPanel);
 		}
 
 		slots = new ItemSlot[slotPanel.childCount];
 
-		for(int i = 0; i < slots.Length; i++)
+		for (int i = 0; i < slots.Length; i++)
 		{
 			slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
 			slots[i].index = i;
@@ -75,18 +74,6 @@ public class UIInventory : MonoBehaviour
 		equipButton.SetActive(false);
 		unequipButton.SetActive(false);
 		dropButton.SetActive(false);
-	}
-
-	public void Toggle()
-	{
-		if (IsOpen())
-		{
-			inventoryWindow.SetActive(false);
-		}
-		else
-		{
-			inventoryWindow.SetActive(true);
-		}
 	}
 
 	public bool IsOpen()
@@ -166,7 +153,7 @@ public class UIInventory : MonoBehaviour
 
 	void ThrowItem(ItemData data)
 	{
-		Instantiate(data.dropProefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
+		Instantiate(data.dropPrefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
 	}
 
 	public void SelectItem(int index)
@@ -208,6 +195,12 @@ public class UIInventory : MonoBehaviour
 					case ConsumableType.Hunger:
 						condition.Eat(selectedItem.consumables[i].value);
 						break;
+					case ConsumableType.Thirst:
+						condition.Drink(selectedItem.consumables[i].value);
+						break;
+					case ConsumableType.Warmth:
+						condition.Heated(selectedItem.consumables[i].value);
+						break;
 				}
 			}
 			RemoveSelectedItem();
@@ -216,7 +209,7 @@ public class UIInventory : MonoBehaviour
 		{
 			buildingSystem.isBuilding = true;
             buildingSystem.selectedItem = selectedItem;
-            buildingSystem.ChangeCurrentBuilding(selectedItem); // ÇöÀç °ÇÃà °´Ã¼ º¯°æ
+            buildingSystem.ChangeCurrentBuilding(selectedItem); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½
 			RemoveSelectedItem();
 			controller.ToggleCursor();
             inventoryWindow.SetActive(false);
