@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public interface IDamagable
 {
 	void TakePhysicalDamage(int damage);
+	float GetHealthRatio();
 }
 
 public class PlayerCondition : MonoBehaviour, IDamagable
@@ -21,6 +23,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 	public float noWarmthHealthDecay;
 	public event Action onTakeDamage;
 	public DayNightCycle DayNightCycle;
+	public Image EnemyHealthUI;
 
 	void Update()
 	{
@@ -96,5 +99,15 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
 		stamina.Subtract(amount);
 		return true;
+	}
+
+	public float GetHealthRatio()
+	{
+		return health.GetPercentage();
+	}
+
+	public void EnemyHealthUIUpdate(float healthRatio)
+	{
+		EnemyHealthUI.fillAmount = healthRatio;
 	}
 }

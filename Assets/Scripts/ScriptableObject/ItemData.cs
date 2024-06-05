@@ -31,7 +31,7 @@ public class ItemData : ScriptableObject
 	public string description;
 	public ItemType type;
 	public Sprite icon;
-	public GameObject dropProefab;
+	public GameObject dropPrefab;
 
 	[Header("Stacking")]
 	public bool canStack;

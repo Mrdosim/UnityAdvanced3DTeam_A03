@@ -12,7 +12,7 @@ public class LPS_ManualRotate : MonoBehaviour {
     void OnMouseDrag() {
     
         rotX = Input.GetAxis("Mouse X") * rotSpeed * Mathf.Deg2Rad;
-        rotTrans.RotateAround(Vector3.up, -rotX);
+		rotTrans.Rotate(Vector3.up, -rotX);
     
     }//OnMouseDrag
 }

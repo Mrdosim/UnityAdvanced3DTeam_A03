@@ -1,18 +1,33 @@
 using UnityEngine;
 
-public class Resource : MonoBehaviour
+public class Resource : MonoBehaviour, IDamagable
 {
 	public ItemData itemToGive;
-	public int quantityPerHit = 1;
-	public int capacity;
+	public int woodSpawnHealth;
+	private int CurrentHealth;
+	public int MaxHealth;
 
-	public void Gather(Vector3 hitPoint, Vector3 hitNormal)
+	private void Start()
 	{
-		for(int i = 0; i < quantityPerHit; i++)
+		CurrentHealth = MaxHealth;
+	}
+
+	public void TakePhysicalDamage(int damage)
+	{
+		int beforeHealth = CurrentHealth;
+		CurrentHealth -= damage;
+		if(beforeHealth/woodSpawnHealth - CurrentHealth/woodSpawnHealth > 0)
 		{
-			if(capacity <= 0) { break; }
-			capacity -= quantityPerHit;
-			Instantiate(itemToGive.dropProefab, hitPoint + Vector3.up, Quaternion.LookRotation(hitNormal, Vector3.up));
+			Instantiate(itemToGive.dropPrefab, transform.position + new Vector3(1, 1), Quaternion.identity);
 		}
+		if(CurrentHealth <= 0)
+		{
+			Destroy(gameObject);
+		}
+	}
+
+	public float GetHealthRatio()
+	{
+		return CurrentHealth / (float)MaxHealth;
 	}
 }

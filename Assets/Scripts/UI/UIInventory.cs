@@ -29,24 +29,22 @@ public class UIInventory : MonoBehaviour
 
 	int curEquipIndex;
 
-	private void Start()
+	public void Initialize()
 	{
 		controller = CharacterManager.Instance.Player.Controller;
 		condition = CharacterManager.Instance.Player.Condition;
 		dropPosition = CharacterManager.Instance.Player.dropPosition;
 
-		controller.inventory += Toggle;
 		CharacterManager.Instance.Player.addItem += AddItem;
 
-		inventoryWindow.SetActive(false);
-		for(int i = 0;i < slotNum; i++)
+		for (int i = 0; i < slotNum; i++)
 		{
-			Instantiate(SlotPrefab, slotPanel).transform.SetParent(slotPanel) ;
+			Instantiate(SlotPrefab, slotPanel).transform.SetParent(slotPanel);
 		}
 
 		slots = new ItemSlot[slotPanel.childCount];
 
-		for(int i = 0; i < slots.Length; i++)
+		for (int i = 0; i < slots.Length; i++)
 		{
 			slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
 			slots[i].index = i;
@@ -67,18 +65,6 @@ public class UIInventory : MonoBehaviour
 		equipButton.SetActive(false);
 		unequipButton.SetActive(false);
 		dropButton.SetActive(false);
-	}
-
-	public void Toggle()
-	{
-		if (IsOpen())
-		{
-			inventoryWindow.SetActive(false);
-		}
-		else
-		{
-			inventoryWindow.SetActive(true);
-		}
 	}
 
 	public bool IsOpen()
@@ -158,7 +144,7 @@ public class UIInventory : MonoBehaviour
 
 	void ThrowItem(ItemData data)
 	{
-		Instantiate(data.dropProefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
+		Instantiate(data.dropPrefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
 	}
 
 	public void SelectItem(int index)
