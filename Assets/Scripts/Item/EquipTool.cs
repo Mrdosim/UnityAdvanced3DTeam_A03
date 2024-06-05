@@ -11,6 +11,8 @@ public class EquipTool : Equip
 	public int onCreatureDamage;
 	public int onWoodDamage;
 	public int onMineralDamage;
+	public int AttackDistance;
+
 	private bool isAttack = false;
 
 	private Animator animator;
@@ -65,6 +67,14 @@ public class EquipTool : Equip
 
 	public  void OnHit(IDamagable target, int targetLayer)
 	{
+		Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+		RaycastHit hit;
+
+		if(Physics.Raycast(ray, out hit, AttackDistance))
+		{
+
+		}
+
 		if (targetLayer == _creatureLayer)
 		{
 			target.TakePhysicalDamage(onCreatureDamage);
