@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7474a191446fa540b9b91ae3684cffd, type: 3}
   m_Name: Item_Buildable_Roof
   m_EditorClassIdentifier: 
-  displayName: "\uBC14\uB2E5"
-  description: "\uC9D1\uC758 \uAE30\uBC18\uC774 \uB418\uB294 \uBC14\uB2E5\uC774\uB2E4."
+  displayName: "\uC9C0\uBD95"
+  description: "\uC9C0\uBD95\uC774\uB2E4. \uACC4\uB2E8\uC774 \uC544\uB2C8\uB2E4."
   type: 3
-  icon: {fileID: 21300000, guid: 6054318fc678eef4e97655493b73c580, type: 3}
-  dropProefab: {fileID: 0}
+  icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  dropPrefab: {fileID: 0}
   canStack: 1
   maxStackAmount: 99
   consumables: []
   equipPrefab: {fileID: 0}
-  buildPrefab: {fileID: 990407309289087857, guid: d775eb937643a9a49b6a724347d9561e, type: 3}
-  previewPrefab: {fileID: 5531183173143659778, guid: 88f224f9a12ebb74094d238514134c26, type: 3}
-  sort: 1
+  buildPrefab: {fileID: 3017193893988956577, guid: 08255c7298fffc346bafed0f9c4cfd3a, type: 3}
+  previewPrefab: {fileID: 4417058177767098555, guid: e2571f8b1cbee974ca60d23a446bafdd, type: 3}
+  sort: 3

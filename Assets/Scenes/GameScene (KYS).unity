@@ -7375,7 +7375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 0
-  fullDayLength: 120
+  fullDayLength: 3000
   startTime: 0.4
   noon: {x: 90, y: 0, z: 0}
   sun: {fileID: 705507994}
@@ -30608,8 +30608,8 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 5120
-  offset: 0.5
-  gridSize: 0.5
+  offset: 0.1
+  gridSize: 0.1
   isBuilding: 0
   dir: 0
   inventory: {fileID: 0}
@@ -80035,6 +80035,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d37ee226704ad0d44814650dbeff1581, type: 2}
   - {fileID: 11400000, guid: d861ba2c6c8081740a0999a580cadc06, type: 2}
   - {fileID: 11400000, guid: 74c78c95069c4f84a838025c1b6360de, type: 2}
+  - {fileID: 11400000, guid: b11d62e7c7a50cc40b90e486a19753e5, type: 2}
 --- !u!1 &4038738330388039118
 GameObject:
   m_ObjectHideFlags: 0
