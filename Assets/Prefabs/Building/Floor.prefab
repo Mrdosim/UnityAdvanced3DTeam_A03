@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 816794030139511847}
   - component: {fileID: 4640673853791211441}
   m_Layer: 10
-  m_Name: Foundation
+  m_Name: Floor
   m_TagString: BuildObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7362753378930916104}
   - component: {fileID: 5194371492580489568}
   m_Layer: 10
-  m_Name: Foundation
+  m_Name: Floor_Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
