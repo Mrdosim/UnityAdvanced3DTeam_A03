@@ -16,9 +16,12 @@ public class WeatherCycle : MonoBehaviour
     public GameObject snow;
     public float durationTime;
 
+    public int RainColdValue;
+    public int SnowColdValue;
+
     private float nowtime = 0;
     private int weathernum = 0;
-
+    private ParticleSystem weatherParticleSystem = new ParticleSystem();
     private void Start()
     {
         WeatherDisable(rain);
@@ -48,29 +51,29 @@ public class WeatherCycle : MonoBehaviour
                 WeatherDisable(snow);
                 break;
             case (int)weatherState.RAIN:
-                WeatherEnable(rain);
+                WeatherEnable(rain,RainColdValue);
                 WeatherDisable(snow);
                 break;
             case (int)weatherState.SNOW:
-                WeatherEnable(snow);
+                WeatherEnable(snow,SnowColdValue);
                 WeatherDisable(rain);
                 break;
         }
 
     }
 
-    private void WeatherEnable(GameObject Weather)
+    private void WeatherEnable(GameObject Weather,int Value)
     {
-        ParticleSystem weatherParticleSystem = new ParticleSystem();
         weatherParticleSystem = Weather.GetComponent<ParticleSystem>();
         weatherParticleSystem.Play();
+        Weather.GetComponent<WeatherController>().coldValue = Value;
     }
 
     private void WeatherDisable(GameObject Weather)
     {
-        ParticleSystem weatherParticleSystem = new ParticleSystem();
         weatherParticleSystem = Weather.GetComponent<ParticleSystem>();
         weatherParticleSystem.Stop();
+        Weather.GetComponent<WeatherController>().coldValue = 0;
     }
 
 }
