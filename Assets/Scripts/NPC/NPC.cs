@@ -28,6 +28,8 @@ public class NPC : MonoBehaviour, IDamagable, DropItem
 	public float maxWanderDistance;
 	public float minWanderWaitTime;
 	public float maxWanderWaitTime;
+	public float maxWanderingMoveTime;
+	private float wanderingStartTime;
 
 	[Header("Combat")]
 	public int damage;
@@ -100,7 +102,7 @@ public class NPC : MonoBehaviour, IDamagable, DropItem
 
 	void PassiveUpdate()
 	{
-		if (aiState == AIState.Wandering && agent.remainingDistance < 0.1f)
+		if ((aiState == AIState.Wandering && agent.remainingDistance < 0.1f) || (Time.time - wanderingStartTime >= maxWanderingMoveTime))
 		{
 			SetState(AIState.Idle);
 			Invoke("WanderToNewLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
@@ -117,6 +119,7 @@ public class NPC : MonoBehaviour, IDamagable, DropItem
 		if (aiState != AIState.Idle) { return; }
 		SetState(AIState.Wandering);
 		agent.SetDestination(GetWanderLocation());
+		wanderingStartTime = Time.time;
 	}
 
 	Vector3 GetWanderLocation()
