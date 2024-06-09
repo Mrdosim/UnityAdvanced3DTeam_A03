@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 6728651695912180168}
   - component: {fileID: 5114236138348889217}
   - component: {fileID: 4157527900540567038}
-  m_Layer: 0
+  - component: {fileID: 6941681166497016036}
+  - component: {fileID: 7142137333745915883}
+  m_Layer: 15
   m_Name: Rock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,3 +85,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6941681166497016036
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3501506411086140127}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.70799, y: 0.92190355, z: 1.8474946}
+  m_Center: {x: 0, y: 0.45188376, z: 0.07592586}
+--- !u!114 &7142137333745915883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3501506411086140127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95ee38946fab55040b7e8a86e5c81336, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  woodSpawnHealth: 25
+  MaxHealth: 100
+  itemToDrop:
+  - {fileID: 11400000, guid: 4123cd0fe09d41f4d9b1759a9887d05b, type: 2}

@@ -9,7 +9,7 @@ public enum AIState
 	Attacking
 }
 
-public class NPC : MonoBehaviour, IDamagable
+public class NPC : MonoBehaviour, IDamagable, DropItem
 {
 	[Header("Stats")]
 	public int NPCID = 0;
@@ -17,7 +17,6 @@ public class NPC : MonoBehaviour, IDamagable
 	int currentHealth;
 	public float walkSpeed;
 	public float runSpeed;
-	public ItemData[] dropOnDeath;
 
 	[Header("AI")]
 	private NavMeshAgent agent;
@@ -42,6 +41,8 @@ public class NPC : MonoBehaviour, IDamagable
 
 	private Animator animator;
 	private SkinnedMeshRenderer[] meshRenderer;
+
+	public ItemData[] itemToDrop;
 
 	private void Awake()
 	{
@@ -195,10 +196,7 @@ public class NPC : MonoBehaviour, IDamagable
 
 	void Die()
 	{
-		for (int i = 0; i < dropOnDeath.Length; i++)
-		{
-			Instantiate(dropOnDeath[i].dropPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
-		}
+		DropItem();
 		QuestManager.Instance.HuntMonster(NPCID);
 
 		Destroy(gameObject);
@@ -222,5 +220,13 @@ public class NPC : MonoBehaviour, IDamagable
 	public float GetHealthRatio()
 	{
 		return currentHealth / MaxHealth;
+	}
+
+	public void DropItem()
+	{
+		foreach (ItemData item in itemToDrop)
+		{
+			Instantiate(item.dropPrefab, transform.position + new Vector3(1, 1), Quaternion.identity);
+		}
 	}
 }
