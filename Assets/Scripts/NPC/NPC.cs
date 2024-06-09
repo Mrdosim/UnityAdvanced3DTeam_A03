@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +12,7 @@ public enum AIState
 public class NPC : MonoBehaviour, IDamagable
 {
 	[Header("Stats")]
+	public int NPCID = 0;
 	public int MaxHealth;
 	int currentHealth;
 	public float walkSpeed;
@@ -99,13 +99,13 @@ public class NPC : MonoBehaviour, IDamagable
 
 	void PassiveUpdate()
 	{
-		if(aiState == AIState.Wandering && agent.remainingDistance < 0.1f)
+		if (aiState == AIState.Wandering && agent.remainingDistance < 0.1f)
 		{
 			SetState(AIState.Idle);
 			Invoke("WanderToNewLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
 		}
 
-		if(playerDistance < detectDistance)
+		if (playerDistance < detectDistance)
 		{
 			SetState(AIState.Attacking);
 		}
@@ -113,7 +113,7 @@ public class NPC : MonoBehaviour, IDamagable
 
 	void WanderToNewLocation()
 	{
-		if(aiState != AIState.Idle) { return; }
+		if (aiState != AIState.Idle) { return; }
 		SetState(AIState.Wandering);
 		agent.SetDestination(GetWanderLocation());
 	}
@@ -126,7 +126,7 @@ public class NPC : MonoBehaviour, IDamagable
 
 		int i = 0;
 
-		while(Vector3.Distance(transform.position, hit.position) < detectDistance)
+		while (Vector3.Distance(transform.position, hit.position) < detectDistance)
 		{
 			NavMesh.SamplePosition(transform.position + (Random.onUnitSphere * Random.Range(minWanderDistance, maxWanderDistance)), out hit, maxWanderDistance, NavMesh.AllAreas);
 			i++;
@@ -138,10 +138,10 @@ public class NPC : MonoBehaviour, IDamagable
 
 	void AttackingUpdate()
 	{
-		if(playerDistance < attackDistance && IsPlayerInFieldOfView())
+		if (playerDistance < attackDistance && IsPlayerInFieldOfView())
 		{
 			agent.isStopped = true;
-			if(Time.time - lastAttackTime > attackRate)
+			if (Time.time - lastAttackTime > attackRate)
 			{
 				lastAttackTime = Time.time;
 				CharacterManager.Instance.Player.Controller.GetComponent<IDamagable>().TakePhysicalDamage(damage);
@@ -151,11 +151,11 @@ public class NPC : MonoBehaviour, IDamagable
 		}
 		else
 		{
-			if(playerDistance < detectDistance)
+			if (playerDistance < detectDistance)
 			{
 				agent.isStopped = false;
 				NavMeshPath path = new NavMeshPath();
-				if(agent.CalculatePath(CharacterManager.Instance.Player.transform.position, path))
+				if (agent.CalculatePath(CharacterManager.Instance.Player.transform.position, path))
 				{
 					agent.SetDestination(CharacterManager.Instance.Player.transform.position);
 				}
@@ -185,7 +185,7 @@ public class NPC : MonoBehaviour, IDamagable
 	public void TakePhysicalDamage(int damage)
 	{
 		currentHealth -= damage;
-		if(currentHealth <= 0)
+		if (currentHealth <= 0)
 		{
 			Die();
 		}
@@ -195,24 +195,25 @@ public class NPC : MonoBehaviour, IDamagable
 
 	void Die()
 	{
-		for(int i = 0; i < dropOnDeath.Length; i++)
+		for (int i = 0; i < dropOnDeath.Length; i++)
 		{
 			Instantiate(dropOnDeath[i].dropPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
 		}
+		QuestManager.Instance.HuntMonster(NPCID);
 
 		Destroy(gameObject);
 	}
 
 	IEnumerator DamageFlash()
 	{
-		for(int i = 0; i < meshRenderer.Length; i++)
+		for (int i = 0; i < meshRenderer.Length; i++)
 		{
 			meshRenderer[i].material.color = new Color(1.0f, 0.6f, 0.6f);
 		}
 
 		yield return new WaitForSeconds(0.1f);
 
-		for(int i= 0;i < meshRenderer.Length; i++)
+		for (int i = 0; i < meshRenderer.Length; i++)
 		{
 			meshRenderer[i].material.color = Color.white;
 		}

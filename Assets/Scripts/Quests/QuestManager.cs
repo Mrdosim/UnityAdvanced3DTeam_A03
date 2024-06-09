@@ -38,6 +38,7 @@ public class QuestManager : MonoBehaviour
 					QuestList.Add(new GatheringQuest(data as GatheringQuestData));
 					break;
 				case QuestType.Hunting:
+					QuestList.Add(new HuntingQuest(data as HuntingQuestData));
 					break;
 			}
 		}
@@ -45,8 +46,7 @@ public class QuestManager : MonoBehaviour
 
 	private void Start()
 	{
-		QuestList[0].IsActive = true;
-		UpdateQuestInfoText();
+		StartQuest(0);
 	}
 
 	//아이템 채집시 소모품의 종류에 따라 소모품 채집 퀘스트에 갯수를 늘려준다.
@@ -65,6 +65,28 @@ public class QuestManager : MonoBehaviour
 				{
 					gatheringQ.GatherItem(consumable.type);
 				}
+				if (quest.QuestClearCheck())
+				{
+					GiveReward(quest);
+				}
+			}
+		}
+		UpdateQuestInfoText();
+	}
+
+	//몬스터가 죽을 때 사냥 카운트에 추가
+	public void HuntMonster(int Id)
+	{
+		if (QuestList.Count == 0)
+		{
+			return;
+		}
+		foreach (Quest quest in QuestList)
+		{
+			if (quest is HuntingQuest && quest.IsActive)
+			{
+				HuntingQuest huntingQ = (HuntingQuest)quest;
+				huntingQ.HuntMonster(Id);
 				if (quest.QuestClearCheck())
 				{
 					GiveReward(quest);
@@ -98,14 +120,26 @@ public class QuestManager : MonoBehaviour
 		}
 		quest.IsActive = false;
 		StartCoroutine(QuestRewardTurnOff());
+		if(quest == QuestList[0])
+		{
+			StartQuest(1);
+		}
 	}
 
+	//퀘스트 보상 창 끄기
 	IEnumerator QuestRewardTurnOff()
 	{
 		yield return new WaitForSeconds(3f);
 		QuestRewardPanel.SetActive(false);
 	}
 
+	void StartQuest(int i)
+	{
+		QuestList[i].IsActive = true;
+		UpdateQuestInfoText();
+	}
+
+	//퀘스트 정보 창 업데이트
 	void UpdateQuestInfoText()
 	{
 		string text = "";

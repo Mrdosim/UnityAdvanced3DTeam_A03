@@ -57,9 +57,13 @@ public class PlayerController : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		if (canLook)
+		if (canLook && controlable)
 		{
 			CameraLook();
+		}
+		if(transform.position.y < 0)
+		{
+			transform.position = new Vector3(transform.position.x, 1.0f, transform.position.z);
 		}
 	}
 
@@ -83,17 +87,19 @@ public class PlayerController : MonoBehaviour
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
-		if (controlable)
+		curMovementInput = context.ReadValue<Vector2>();
+		if (!controlable)
 		{
-			curMovementInput = context.ReadValue<Vector2>();
+			curMovementInput = Vector2.zero;
 		}
 	}
 
 	public void OnLook(InputAction.CallbackContext context)
 	{
-		if(controlable)
+		mouseDelta = context.ReadValue<Vector2>();
+		if (!controlable)
 		{
-			mouseDelta = context.ReadValue<Vector2>();
+			mouseDelta = Vector2.zero;
 		}
 	}
 
