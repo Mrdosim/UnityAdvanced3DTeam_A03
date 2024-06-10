@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 2210053435375541801}
   - component: {fileID: 7384107543506570049}
   - component: {fileID: 2140766620600203912}
+  - component: {fileID: 2023712063865400880}
   m_Layer: 7
   m_Name: Item_CampFire
   m_TagString: Untagged
@@ -111,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 7521803541285341606}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -88.1033, y: -0.09572753, z: -2.601226}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -179,3 +180,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7251249, y: 0.34135026, z: 0.71620095}
   m_Center: {x: 0.0022079647, y: 0.15900686, z: 0.0016317964}
+--- !u!114 &2023712063865400880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7521803541285341606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fce3c93193cc31948bb83aa468d935f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRate: 0
+  attackDistance: 0
+  useStamina: 0
+  doesGatherResources: 0
+  doesDealDamge: 0
+  damage: 0

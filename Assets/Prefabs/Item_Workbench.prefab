@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 3518123147485004245}
   - component: {fileID: 5075722432843729405}
   - component: {fileID: 6028271756578476051}
+  - component: {fileID: -457673033549055570}
   m_Layer: 7
   m_Name: Item_Workbench
   m_TagString: Untagged
@@ -110,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 6124465247659883734}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -88.1033, y: -0.09572753, z: -2.601226}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -151,3 +152,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.6826614, y: 1.7386565, z: 0.9059054}
   m_Center: {x: 0, y: 0.8717766, z: 0.046984375}
+--- !u!114 &-457673033549055570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6124465247659883734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fce3c93193cc31948bb83aa468d935f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRate: 0
+  attackDistance: 0
+  useStamina: 0
+  doesGatherResources: 0
+  doesDealDamge: 0
+  damage: 0

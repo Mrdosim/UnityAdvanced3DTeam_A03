@@ -20,7 +20,8 @@ public class PlayerController : MonoBehaviour
 	public bool canLook = true;
 
 	public Action inventory;
-	private Rigidbody _rigidbody;
+
+    private Rigidbody _rigidbody;
 	public Action SettingEvents;
 	public GameObject SettingPanel;
 
@@ -141,4 +142,6 @@ public class PlayerController : MonoBehaviour
 			SettingPanel.SetActive(true);
 		}
 	}
+
+	
 }

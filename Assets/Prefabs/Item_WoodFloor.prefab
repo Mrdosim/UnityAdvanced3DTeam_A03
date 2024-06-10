@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1698174417856873842}
   - component: {fileID: 7745159765672326552}
   - component: {fileID: 2318407242340427570}
+  - component: {fileID: 5488244342423020641}
   m_Layer: 7
   m_Name: Item_WoodFloor
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1371614897471672434}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -88.1033, y: -0.09572753, z: -2.601226}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -68,6 +69,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.011328, y: 0.059999995, z: 1.0202475}
   m_Center: {x: -0.0007998049, y: 0.015, z: 0.0013258755}
+--- !u!114 &5488244342423020641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371614897471672434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fce3c93193cc31948bb83aa468d935f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRate: 0
+  attackDistance: 0
+  useStamina: 0
+  doesGatherResources: 0
+  doesDealDamge: 0
+  damage: 0
 --- !u!1 &7998779123659452412
 GameObject:
   m_ObjectHideFlags: 0

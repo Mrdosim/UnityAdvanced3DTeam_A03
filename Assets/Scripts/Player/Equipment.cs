@@ -1,3 +1,6 @@
+using System;
+using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,7 +12,10 @@ public class Equipment : MonoBehaviour
 	private PlayerController playerController;
 	private PlayerCondition PlayerCondition;
 
-	private void Start()
+    public Action handInven;
+    public int selectInvenNum;
+
+    private void Start()
 	{
 		playerController = GetComponent<PlayerController>();
 		PlayerCondition = GetComponent<PlayerCondition>();
@@ -17,9 +23,14 @@ public class Equipment : MonoBehaviour
 
 	public void EquipNew(ItemData data)
 	{
+        Debug.Log("½ÇÇà");
 		UnEquip();
-		curEquip = Instantiate(data.equipPrefab, equipParent).GetComponent<Equip>();
-	}
+		bool IsHaveScript = Instantiate(data.dropProefab, equipParent).TryGetComponent<Equip>(out curEquip);
+        Destroy(curEquip.gameObject.GetComponent<Rigidbody>());
+
+        curEquip.gameObject.transform.localPosition = new Vector3(0.4f, -0.06f, 0.5f);
+        curEquip.gameObject.transform.localRotation = Quaternion.Euler(0, 85, 0);
+    }
 
 	public void UnEquip()
 	{
@@ -36,4 +47,38 @@ public class Equipment : MonoBehaviour
 			curEquip.OnAttackInput();
 		}
 	}
+
+    public void OnHandInventory(InputAction.CallbackContext context)
+    {
+        if (context.phase != InputActionPhase.Started && Input.GetKey(KeyCode.Keypad1))
+        {
+            selectInvenNum = 14;
+            handInven?.Invoke();
+        }
+
+        if (context.phase != InputActionPhase.Started && Input.GetKey(KeyCode.Keypad2))
+        {
+            selectInvenNum = 15;
+            handInven?.Invoke();
+        }
+
+        if (context.phase != InputActionPhase.Started && Input.GetKey(KeyCode.Keypad3))
+        {
+            selectInvenNum = 16;
+            handInven?.Invoke();
+        }
+
+        if (context.phase != InputActionPhase.Started && Input.GetKey(KeyCode.Keypad4))
+        {
+            selectInvenNum = 17;
+            handInven?.Invoke();
+        }
+
+        if (context.phase != InputActionPhase.Started && Input.GetKey(KeyCode.Keypad5))
+        {
+            selectInvenNum = 18;
+            handInven?.Invoke();
+        }
+    }
+
 }
