@@ -2247,6 +2247,7 @@ GameObject:
   - component: {fileID: 57582727}
   - component: {fileID: 57582729}
   - component: {fileID: 57582728}
+  - component: {fileID: 57582730}
   m_Layer: 13
   m_Name: Archer
   m_TagString: Untagged
@@ -2314,6 +2315,29 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &57582730
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57582726}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 2.22
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.05, z: 0}
 --- !u!1001 &58703039
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19396,34 +19420,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1081669137125640335, guid: 038630088603fbf42ab39637ebe99213, type: 3}
   m_PrefabInstance: {fileID: 631473527}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &639625005 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cc95835cb4a7d524994861e2e18d837f, type: 3}
-  m_PrefabInstance: {fileID: 1999520779}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &639625010
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 639625005}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.6
-  m_Height: 2.22
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.05, z: 0}
 --- !u!4 &639625012 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cc95835cb4a7d524994861e2e18d837f, type: 3}
@@ -60064,10 +60060,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6502182839619065283, guid: cc95835cb4a7d524994861e2e18d837f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 528964300}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cc95835cb4a7d524994861e2e18d837f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 639625010}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc95835cb4a7d524994861e2e18d837f, type: 3}
 --- !u!1 &2000218653
 GameObject:
