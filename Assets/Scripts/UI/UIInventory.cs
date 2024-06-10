@@ -40,7 +40,7 @@ public class UIInventory : MonoBehaviour
 
 	public List<ItemData> TestItems;
 
-	public void Initialize()
+	public void Initialize();
 
     [Header("Drag And Drop")]
     public ItemData DraggingItem;
