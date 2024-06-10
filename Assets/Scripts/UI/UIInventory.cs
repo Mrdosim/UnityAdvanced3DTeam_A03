@@ -1,14 +1,19 @@
 using System.Collections.Generic;
+using System;
+using System.Reflection;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class UIInventory : MonoBehaviour
 {
 	public ItemSlot[] slots;
 	public GameObject inventoryWindow;
 	public Transform slotPanel;
-	public Transform dropPosition;
+    public Transform handSlotPanel;
+    public Transform dropPosition;
 
 	[Header("Select Item")]
 	public TextMeshProUGUI selectedItemName;
@@ -20,11 +25,13 @@ public class UIInventory : MonoBehaviour
 	public GameObject unequipButton;
 	public GameObject dropButton;
 	public GameObject SlotPrefab;
-	int slotNum = 14;
+	public Outline outline;
+	int slotNum = 19;
 
 	private PlayerController controller;
 	private PlayerCondition condition;
 	private BuildingSystem buildingSystem;
+	private Equipment equip;
 
 	ItemData selectedItem;
 	int selectedItemIndex = 0;
@@ -35,6 +42,14 @@ public class UIInventory : MonoBehaviour
 
 	public void Initialize()
 
+    [Header("Drag And Drop")]
+    public ItemData DraggingItem;
+	public int DeletSlotIndex;
+	public bool isInvenMove;
+	public bool isDragging;
+    public bool isEnter;
+
+    private void Start()
 	{
 		controller = CharacterManager.Instance.Player.Controller;
 		condition = CharacterManager.Instance.Player.Condition;
@@ -43,33 +58,54 @@ public class UIInventory : MonoBehaviour
 		buildingSystem.inventory = this;
 
 		CharacterManager.Instance.Player.addItem += AddItem;
+		equip = CharacterManager.Instance.Player.equip;
+
+		controller.inventory += Toggle;
+		equip.handInven += OnEquipButton;
+
+        CharacterManager.Instance.Player.addItem += AddItem;
 
 		for (int i = 0; i < slotNum; i++)
 		{
-			Instantiate(SlotPrefab, slotPanel).transform.SetParent(slotPanel);
+			if (i < 14)
+			{
+                Instantiate(SlotPrefab, slotPanel).transform.SetParent(slotPanel);
+			}
+			else
+			{
+                Instantiate(SlotPrefab, handSlotPanel).transform.SetParent(handSlotPanel);
+            }
+			
 		}
 
-		slots = new ItemSlot[slotPanel.childCount];
+        slots = new ItemSlot[slotPanel.childCount + handSlotPanel.childCount];
 
 		for (int i = 0; i < slots.Length; i++)
 		{
-			slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
+			if(i < 14)
+			{
+                slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
+			}
+			else
+			{
+                slots[i] = handSlotPanel.GetChild(i-14).GetComponent<ItemSlot>();
+            }
+
 			slots[i].index = i;
 			slots[i].inventory = this;
 		}
 
-		ClearSelectedItemWindow();
-
 		AddTestItem();
-	}
+	
+        // handSlots = 14 ~ 18
+
+        UpdateUI();
+        ClearSelectedItemWindow();
+
+    }
 
 	void ClearSelectedItemWindow()
 	{
-		selectedItemName.text = string.Empty;
-		selectedItemDescription.text = string.Empty;
-		selectedItemStatName.text = string.Empty;
-		selectedItemStatValue.text = string.Empty;
-
 		useButton.SetActive(false);
 		equipButton.SetActive(false);
 		unequipButton.SetActive(false);
@@ -161,23 +197,19 @@ public class UIInventory : MonoBehaviour
 		if (slots[index].item == null) { return; }
 
 		selectedItem = slots[index].item;
-		selectedItemIndex = index;
+        selectedItemIndex = index;
 
-		selectedItemName.text = selectedItem.displayName;
-		selectedItemDescription.text = selectedItem.description;
-		
-		selectedItemStatName.text = string.Empty;
-		selectedItemStatValue.text = string.Empty;
-
-		for(int i = 0;i<selectedItem.consumables.Length;i++)
+		for(int i = 0; i<selectedItem.consumables.Length; i++)
 		{
 			selectedItemStatName.text += selectedItem.consumables[i].type.ToString() + "\n";
 			selectedItemStatValue.text += selectedItem.consumables[i].value.ToString() + "\n";
 		}
 
+
 		useButton.SetActive(selectedItem.type == ItemType.Consumable || selectedItem.type == ItemType.Buildable);
-		equipButton.SetActive(selectedItem.type == ItemType.Equipable && !slots[index].equipped);
-		unequipButton.SetActive(selectedItem.type == ItemType.Equipable && slots[index].equipped);
+
+		equipButton.SetActive(!slots[index].equipped);
+		unequipButton.SetActive(slots[index].equipped);
 		dropButton.SetActive(true);
 	}
 
@@ -228,7 +260,7 @@ public class UIInventory : MonoBehaviour
 		if(slots[selectedItemIndex].quantity <= 0)
 		{
 			selectedItem = null;
-			slots[selectedItemIndex].item = null;
+            slots[selectedItemIndex].item = null;
 			selectedItemIndex = -1;
 			ClearSelectedItemWindow();
 		}
@@ -247,14 +279,14 @@ public class UIInventory : MonoBehaviour
 
     public void OnEquipButton()
 	{
-		if (slots[curEquipIndex].equipped)
+		if (slots[equip.selectInvenNum].equipped)
 		{
 			UnEquip(curEquipIndex);
 		}
 
-		slots[selectedItemIndex].equipped = true;
-		curEquipIndex = selectedItemIndex;
-		CharacterManager.Instance.Player.equip.EquipNew(selectedItem);
+		slots[equip.selectInvenNum].equipped = true;
+		curEquipIndex = equip.selectInvenNum;
+		equip.EquipNew(selectedItem);
 		UpdateUI();
 
 		SelectItem(selectedItemIndex);

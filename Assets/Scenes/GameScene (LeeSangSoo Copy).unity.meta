@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/GameScene (LeeSangSoo Copy).unity.meta
 guid: c264a62a4eb3fee4c812075d99a88980
+========
+guid: da8858dc5276be140808468cc8e289b5
+folderAsset: yes
+>>>>>>>> 632bbdd3f2765c027772c5f55954168e2edc3856:Assets/Prefabs/Scenes.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
