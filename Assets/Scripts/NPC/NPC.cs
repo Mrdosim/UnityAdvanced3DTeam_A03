@@ -159,16 +159,7 @@ public class NPC : MonoBehaviour, IDamagable, DropItem
 			{
 				agent.isStopped = false;
 				NavMeshPath path = new NavMeshPath();
-				if (agent.CalculatePath(CharacterManager.Instance.Player.transform.position, path))
-				{
-					agent.SetDestination(CharacterManager.Instance.Player.transform.position);
-				}
-				else
-				{
-					agent.SetDestination(transform.position);
-					agent.isStopped = true;
-					SetState(AIState.Wandering);
-				}
+				agent.SetDestination(CharacterManager.Instance.Player.transform.position);
 			}
 			else
 			{
