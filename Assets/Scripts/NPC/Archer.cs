@@ -26,6 +26,7 @@ public class Archer : MonoBehaviour, IDamagable, DropItem
 	private float lastAttackTime;
 	public float attackDistance;
 	public GameObject Arrow;
+	private Quaternion rotationOrigin;
 	
 	private Animator animator;
 	private SkinnedMeshRenderer[] meshRenderer;
@@ -34,7 +35,7 @@ public class Archer : MonoBehaviour, IDamagable, DropItem
 	private void Awake()
 	{
 		agent = GetComponent<NavMeshAgent>();
-		animator = GetComponent<Animator>();
+		animator = GetComponentInChildren<Animator>();
 		meshRenderer = GetComponentsInChildren<SkinnedMeshRenderer>();
 		_currentHealth = MaxHealth;
 		_startPosition = transform.position;
@@ -62,6 +63,11 @@ public class Archer : MonoBehaviour, IDamagable, DropItem
 				AttackingUpdate();
 				break;
 		}
+	}
+
+	private void LateUpdate()
+	{
+		transform.rotation = rotationOrigin;
 	}
 
 	// »óÅÂ´Â
@@ -111,6 +117,7 @@ public class Archer : MonoBehaviour, IDamagable, DropItem
 			agent.isStopped = true;
 			if (Time.time - lastAttackTime > attackRate)
 			{
+				rotationOrigin = transform.rotation;
 				lastAttackTime = Time.time;
 				animator.SetBool(IsAttacking, true);
 				Vector3 dir = (CharacterManager.Instance.Player.transform.position - transform.position + (Vector3.down * 1f)).normalized;
@@ -118,6 +125,7 @@ public class Archer : MonoBehaviour, IDamagable, DropItem
 				GameObject arrow = Instantiate(Arrow, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
 				arrow.GetComponent<Arrow>().direction = dir;
 				arrow.GetComponent<Arrow>().damage = damage;
+				
 			}
 		}
 		else
@@ -127,15 +135,16 @@ public class Archer : MonoBehaviour, IDamagable, DropItem
 			{
 				agent.isStopped = false;
 				NavMeshPath path = new NavMeshPath();
-				if (agent.CalculatePath(CharacterManager.Instance.Player.transform.position, path))
-				{
-					agent.SetDestination(CharacterManager.Instance.Player.transform.position);
-				}
-				else
-				{
-					agent.SetDestination(_startPosition);
-					SetState(AIState.Wandering);
-				}
+				agent.SetDestination(CharacterManager.Instance.Player.transform.position);
+				//if (agent.CalculatePath(CharacterManager.Instance.Player.transform.position, path))
+				//{
+
+				//}
+				//else
+				//{
+				//	agent.SetDestination(_startPosition);
+				//	SetState(AIState.Wandering);
+				//}
 			}
 			else
 			{
