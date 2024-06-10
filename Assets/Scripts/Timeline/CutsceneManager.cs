@@ -27,6 +27,7 @@ public class CutsceneManager : MonoBehaviour
 			SoundManager.Instance.BackgroundMusicMute();
 			SoundManager.Instance.NatureMusicOn();
 		}
+		director.gameObject.SetActive(false);
         
     }
 
