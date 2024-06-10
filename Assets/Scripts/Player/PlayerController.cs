@@ -136,19 +136,22 @@ public class PlayerController : MonoBehaviour
 
 	public void OnInventory(InputAction.CallbackContext context)
 	{
-        if (context.phase == InputActionPhase.Started)
-        {
-            if (CharacterManager.Instance.Player.buildingSystem.isBuilding)
-            {
-                CharacterManager.Instance.Player.buildingSystem.CancelBuilding();
-                inventory?.Invoke();
-            }
-            else
-            {
-                inventory?.Invoke();
-            }
-            ToggleCursor();
-        }
+		if (controlable)
+		{
+			if (context.phase == InputActionPhase.Started)
+			{
+				if (CharacterManager.Instance.Player.buildingSystem.isBuilding)
+				{
+					CharacterManager.Instance.Player.buildingSystem.CancelBuilding();
+					inventory?.Invoke();
+				}
+				else
+				{
+					inventory?.Invoke();
+				}
+				ToggleCursor();
+			}
+		}
     }
 	
 	public void OnSetting(InputAction.CallbackContext context)

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public interface IDamagable
@@ -24,9 +25,14 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 	public event Action onTakeDamage;
 	public DayNightCycle DayNightCycle;
 	public Image EnemyHealthUI;
+	public GameObject GameEndPanel;
 
 	void Update()
 	{
+		if (health.curValue <= 0f)
+		{
+			Die();
+		}
 		hunger.Subtract(hunger.passiveValue * Time.deltaTime);
 		thirst.Subtract(thirst.passiveValue * Time.deltaTime);
 		if(DayNightCycle.time < 0.2f || DayNightCycle.time > 0.8f)
@@ -53,7 +59,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 		{
 			health.Subtract(noWarmthHealthDecay * Time.deltaTime);
 		}
-		if (health.curValue == 0f)
+		if (health.curValue <= 0f)
 		{
 			Die();
 		}
@@ -81,7 +87,15 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
 	private void Die()
 	{
-		Debug.Log("Die");
+		CharacterManager.Instance.Player.Controller.ChangeControlable(false);
+		Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
+		GameEndPanel.SetActive(true);
+	}
+
+	public void ReStartGame()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
 	public void TakePhysicalDamage(int damage)
