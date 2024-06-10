@@ -1,18 +1,47 @@
 using UnityEngine;
+using static UnityEditor.Progress;
 
-public class Resource : MonoBehaviour
+public interface DropItem
 {
-	public ItemData itemToGive;
-	public int quantityPerHit = 1;
-	public int capacity;
+	public void DropItem();
+}
 
-	public void Gather(Vector3 hitPoint, Vector3 hitNormal)
+public class Resource : MonoBehaviour, IDamagable, DropItem
+{
+	public int woodSpawnHealth;
+	private int CurrentHealth;
+	public int MaxHealth;
+	public ItemData[] itemToDrop;
+
+	private void Start()
 	{
-		for(int i = 0; i < quantityPerHit; i++)
+		CurrentHealth = MaxHealth;
+	}
+
+	public void TakePhysicalDamage(int damage)
+	{
+		int beforeHealth = CurrentHealth;
+		CurrentHealth -= damage;
+		if(beforeHealth/woodSpawnHealth - CurrentHealth/woodSpawnHealth > 0)
 		{
-			if(capacity <= 0) { break; }
-			capacity -= quantityPerHit;
-			Instantiate(itemToGive.dropProefab, hitPoint + Vector3.up, Quaternion.LookRotation(hitNormal, Vector3.up));
+			DropItem();
+		}
+		if(CurrentHealth <= 0)
+		{
+			Destroy(gameObject);
+		}
+	}
+
+	public float GetHealthRatio()
+	{
+		return CurrentHealth / (float)MaxHealth;
+	}
+
+	public void DropItem()
+	{
+		foreach (ItemData item in itemToDrop)
+		{
+			Instantiate(item.dropPrefab, transform.position + new Vector3(1, 1), Quaternion.identity);
 		}
 	}
 }

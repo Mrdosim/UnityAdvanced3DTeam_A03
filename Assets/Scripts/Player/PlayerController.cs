@@ -19,23 +19,37 @@ public class PlayerController : MonoBehaviour
 	private Vector2 mouseDelta;
 	public bool canLook = true;
 
+	[Header("Inventory")]
 	public Action inventory;
-	private Rigidbody _rigidbody;
+	public GameObject InventoryPanel;
+
+	[Header("Settings")]
 	public Action SettingEvents;
 	public GameObject SettingPanel;
+
+	[Header("Others")]
+	private Rigidbody _rigidbody;
+	private bool controlable = true;
 
 	private void Awake()
 	{
 		_rigidbody = GetComponent<Rigidbody>();
 	}
-	// Start is called before the first frame update
+	
 	void Start()
 	{
 		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
 		SettingEvents += ToggleSetting;
+		inventory += ToggleInventory;
+		InventoryPanel.GetComponent<UIInventory>().Initialize();
 	}
 
-	// Update is called once per frame
+	private void ToggleInventory()
+	{
+		InventoryPanel.SetActive(!InventoryPanel.activeInHierarchy);
+	}
+
 	void FixedUpdate()
 	{
 		Move();
@@ -43,9 +57,13 @@ public class PlayerController : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		if (canLook)
+		if (canLook && controlable)
 		{
 			CameraLook();
+		}
+		if(transform.position.y < 0)
+		{
+			transform.position = new Vector3(transform.position.x, 1.0f, transform.position.z);
 		}
 	}
 
@@ -70,18 +88,29 @@ public class PlayerController : MonoBehaviour
 	public void OnMove(InputAction.CallbackContext context)
 	{
 		curMovementInput = context.ReadValue<Vector2>();
+		if (!controlable)
+		{
+			curMovementInput = Vector2.zero;
+		}
 	}
 
 	public void OnLook(InputAction.CallbackContext context)
 	{
 		mouseDelta = context.ReadValue<Vector2>();
+		if (!controlable)
+		{
+			mouseDelta = Vector2.zero;
+		}
 	}
 
 	public void OnJump(InputAction.CallbackContext context)
 	{
-		if(context.phase == InputActionPhase.Started && IsGrounded())
+		if (controlable)
 		{
-			_rigidbody.AddForce(Vector2.up * JumpPower, ForceMode.Impulse);
+			if (context.phase == InputActionPhase.Started && IsGrounded())
+			{
+				_rigidbody.AddForce(Vector2.up * JumpPower, ForceMode.Impulse);
+			}
 		}
 	}
 
@@ -97,7 +126,7 @@ public class PlayerController : MonoBehaviour
 
 		for(int i = 0; i < rays.Length; i++)
 		{
-			if (Physics.Raycast(rays[i], 0.5f, groundLayerMask))
+			if (Physics.Raycast(rays[i], 1.0f, groundLayerMask))
 			{
 				return true;
 			}
@@ -107,27 +136,51 @@ public class PlayerController : MonoBehaviour
 
 	public void OnInventory(InputAction.CallbackContext context)
 	{
-		if(context.phase == InputActionPhase.Started)
+		if (controlable)
 		{
-			inventory?.Invoke();
-			ToggleCursor();
+			if (context.phase == InputActionPhase.Started)
+			{
+				if (CharacterManager.Instance.Player.buildingSystem.isBuilding)
+				{
+					CharacterManager.Instance.Player.buildingSystem.CancelBuilding();
+					inventory?.Invoke();
+				}
+				else
+				{
+					inventory?.Invoke();
+				}
+				ToggleCursor();
+			}
 		}
-	}
+    }
 	
 	public void OnSetting(InputAction.CallbackContext context)
 	{
-		if (context.phase == InputActionPhase.Started)
+		if (controlable)
 		{
-			SettingEvents?.Invoke();
-			ToggleCursor();
+			if (context.phase == InputActionPhase.Started)
+			{
+				SettingEvents?.Invoke();
+				ToggleCursor();
+			}
 		}
 	}
 
-	void ToggleCursor()
+	public void ToggleCursor()
 	{
-		bool toggle = Cursor.lockState == CursorLockMode.Locked;
-		Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
-		canLook = !toggle;
+		bool isLocked = Cursor.lockState == CursorLockMode.Locked;
+		Cursor.lockState = isLocked ? CursorLockMode.None : CursorLockMode.Locked;
+		if (isLocked)
+		{
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
+		}
+		else
+		{
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+		}
+		canLook = !isLocked;
 	}
 
 	void ToggleSetting()
@@ -140,5 +193,10 @@ public class PlayerController : MonoBehaviour
 		{
 			SettingPanel.SetActive(true);
 		}
+	}
+
+	public void ChangeControlable(bool value)
+	{
+		controlable = value;
 	}
 }

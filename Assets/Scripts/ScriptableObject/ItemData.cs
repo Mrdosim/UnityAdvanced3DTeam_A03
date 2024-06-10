@@ -5,13 +5,16 @@ public enum ItemType
 {
 	Equipable,
 	Consumable,
-	Resource
+	Resource,
+	Buildable
 }
 
 public enum ConsumableType
 {
 	Health,
-	Hunger
+	Hunger,
+	Thirst,
+	Warmth
 }
 
 [Serializable]
@@ -29,7 +32,7 @@ public class ItemData : ScriptableObject
 	public string description;
 	public ItemType type;
 	public Sprite icon;
-	public GameObject dropProefab;
+	public GameObject dropPrefab;
 
 	[Header("Stacking")]
 	public bool canStack;
@@ -41,4 +44,8 @@ public class ItemData : ScriptableObject
 	[Header("Equip")]
 	public GameObject equipPrefab;
 
+	[Header("Buildable")]
+	public GameObject buildPrefab;
+	public GameObject previewPrefab;
+	public ObjectSort sort;
 }

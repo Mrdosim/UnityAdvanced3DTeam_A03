@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,30 +24,34 @@ public class UIInventory : MonoBehaviour
 
 	private PlayerController controller;
 	private PlayerCondition condition;
+	private BuildingSystem buildingSystem;
 
 	ItemData selectedItem;
 	int selectedItemIndex = 0;
 
 	int curEquipIndex;
 
-	private void Start()
+	public List<ItemData> TestItems;
+
+	public void Initialize()
+
 	{
 		controller = CharacterManager.Instance.Player.Controller;
 		condition = CharacterManager.Instance.Player.Condition;
 		dropPosition = CharacterManager.Instance.Player.dropPosition;
+		buildingSystem = CharacterManager.Instance.Player.buildingSystem;
+		buildingSystem.inventory = this;
 
-		controller.inventory += Toggle;
 		CharacterManager.Instance.Player.addItem += AddItem;
 
-		inventoryWindow.SetActive(false);
-		for(int i = 0;i < slotNum; i++)
+		for (int i = 0; i < slotNum; i++)
 		{
-			Instantiate(SlotPrefab, slotPanel).transform.SetParent(slotPanel) ;
+			Instantiate(SlotPrefab, slotPanel).transform.SetParent(slotPanel);
 		}
 
 		slots = new ItemSlot[slotPanel.childCount];
 
-		for(int i = 0; i < slots.Length; i++)
+		for (int i = 0; i < slots.Length; i++)
 		{
 			slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
 			slots[i].index = i;
@@ -54,6 +59,8 @@ public class UIInventory : MonoBehaviour
 		}
 
 		ClearSelectedItemWindow();
+
+		AddTestItem();
 	}
 
 	void ClearSelectedItemWindow()
@@ -67,18 +74,6 @@ public class UIInventory : MonoBehaviour
 		equipButton.SetActive(false);
 		unequipButton.SetActive(false);
 		dropButton.SetActive(false);
-	}
-
-	public void Toggle()
-	{
-		if (IsOpen())
-		{
-			inventoryWindow.SetActive(false);
-		}
-		else
-		{
-			inventoryWindow.SetActive(true);
-		}
 	}
 
 	public bool IsOpen()
@@ -158,7 +153,7 @@ public class UIInventory : MonoBehaviour
 
 	void ThrowItem(ItemData data)
 	{
-		Instantiate(data.dropProefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
+		Instantiate(data.dropPrefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
 	}
 
 	public void SelectItem(int index)
@@ -180,7 +175,7 @@ public class UIInventory : MonoBehaviour
 			selectedItemStatValue.text += selectedItem.consumables[i].value.ToString() + "\n";
 		}
 
-		useButton.SetActive(selectedItem.type == ItemType.Consumable);
+		useButton.SetActive(selectedItem.type == ItemType.Consumable || selectedItem.type == ItemType.Buildable);
 		equipButton.SetActive(selectedItem.type == ItemType.Equipable && !slots[index].equipped);
 		unequipButton.SetActive(selectedItem.type == ItemType.Equipable && slots[index].equipped);
 		dropButton.SetActive(true);
@@ -200,9 +195,24 @@ public class UIInventory : MonoBehaviour
 					case ConsumableType.Hunger:
 						condition.Eat(selectedItem.consumables[i].value);
 						break;
+					case ConsumableType.Thirst:
+						condition.Drink(selectedItem.consumables[i].value);
+						break;
+					case ConsumableType.Warmth:
+						condition.Heated(selectedItem.consumables[i].value);
+						break;
 				}
 			}
 			RemoveSelectedItem();
+		}
+		else if(selectedItem.type == ItemType.Buildable)
+		{
+			buildingSystem.isBuilding = true;
+            buildingSystem.selectedItem = selectedItem;
+            buildingSystem.ChangeCurrentBuilding(selectedItem); // ���� ���� ��ü ����
+			RemoveSelectedItem();
+			controller.ToggleCursor();
+            inventoryWindow.SetActive(false);
 		}
 	}
 
@@ -212,7 +222,7 @@ public class UIInventory : MonoBehaviour
 		RemoveSelectedItem();
 	}
 
-	void RemoveSelectedItem()
+	public void RemoveSelectedItem()
 	{
 		slots[selectedItemIndex].quantity--;
 		if(slots[selectedItemIndex].quantity <= 0)
@@ -226,7 +236,16 @@ public class UIInventory : MonoBehaviour
 		UpdateUI();
 	}
 
-	public void OnEquipButton()
+    public void RestoreSelectedItem()
+    {
+        if (selectedItemIndex >= 0 && selectedItemIndex < slots.Length)
+        {
+            slots[selectedItemIndex].quantity++;
+            UpdateUI();
+        }
+    }
+
+    public void OnEquipButton()
 	{
 		if (slots[curEquipIndex].equipped)
 		{
@@ -255,5 +274,20 @@ public class UIInventory : MonoBehaviour
 	public void OnUnEquipButton()
 	{
 		UnEquip(selectedItemIndex);
+	}
+
+	void AddTestItem()
+	{
+		foreach (ItemData item in TestItems)
+		{
+			ItemSlot emptySlot = GetEmptySlot();
+
+			if (emptySlot != null)
+			{
+				emptySlot.item = item;
+				emptySlot.quantity = 10;
+			}
+		}
+		UpdateUI();
 	}
 }

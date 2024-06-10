@@ -20,6 +20,11 @@ public class ItemObject : MonoBehaviour, IInteractable
 	{
 		CharacterManager.Instance.Player.itemData = data;
 		CharacterManager.Instance.Player.addItem?.Invoke();
+		if(data.type == ItemType.Consumable)
+		{
+			QuestManager.Instance.GatherItem(data.consumables);
+		}
+		
 		Destroy(gameObject);
 	}
 }
