@@ -126,8 +126,9 @@ public class MutantBehaviour : MonoBehaviour, IDamagable
 
 	public void StartFight()
 	{
-		animator.SetTrigger("StartFight");
-	}
+        SoundManager.Instance.MutantMusicOn();
+        animator.SetTrigger("StartFight");
+    }  
 
 	public void TakePhysicalDamage(int damage)
 	{
@@ -167,7 +168,7 @@ public class MutantBehaviour : MonoBehaviour, IDamagable
 			Instantiate(dropOnDeath[i].dropPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
 		}
 		QuestManager.Instance.HuntMonster(NPCID);
-
+		SoundManager.Instance.BackgroundMusicMute();
 		Destroy(gameObject);
 	}
 

@@ -7,6 +7,7 @@ public class StartBtn : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene("GameScene (Giwoong)");
+        SceneManager.LoadScene(1);
+        SoundManager.Instance.DungeonMusicOn();
     }
 }

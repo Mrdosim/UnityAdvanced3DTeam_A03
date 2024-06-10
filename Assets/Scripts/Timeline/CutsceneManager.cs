@@ -21,15 +21,26 @@ public class CutsceneManager : MonoBehaviour
 		if(QuestUI != null)
 			QuestUI.SetActive(true);
 		if(Subtitle != null) Subtitle.SetActive(false);
-		
-	}
+
+		if(_director == Directors[0])
+		{
+			SoundManager.Instance.BackgroundMusicMute();
+			SoundManager.Instance.NatureMusicOn();
+		}
+        
+    }
 
 	private void Director_Played(PlayableDirector director)
 	{
 		CharacterManager.Instance.Player.Controller.ChangeControlable(false);
 		QuestUI.SetActive(false);
 		Subtitle.SetActive(true);
-	}
+
+        if (_director == Directors[1])
+        {
+            SoundManager.Instance.MutantTalkMusicOn();
+        }
+    }
 
 	public void StartNewCutScene(int index)
 	{
