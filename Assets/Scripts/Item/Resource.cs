@@ -1,11 +1,17 @@
 using UnityEngine;
+using static UnityEditor.Progress;
 
-public class Resource : MonoBehaviour, IDamagable
+public interface DropItem
 {
-	public ItemData itemToGive;
+	public void DropItem();
+}
+
+public class Resource : MonoBehaviour, IDamagable, DropItem
+{
 	public int woodSpawnHealth;
 	private int CurrentHealth;
 	public int MaxHealth;
+	public ItemData[] itemToDrop;
 
 	private void Start()
 	{
@@ -18,7 +24,7 @@ public class Resource : MonoBehaviour, IDamagable
 		CurrentHealth -= damage;
 		if(beforeHealth/woodSpawnHealth - CurrentHealth/woodSpawnHealth > 0)
 		{
-			Instantiate(itemToGive.dropPrefab, transform.position + new Vector3(1, 1), Quaternion.identity);
+			DropItem();
 		}
 		if(CurrentHealth <= 0)
 		{
@@ -29,5 +35,13 @@ public class Resource : MonoBehaviour, IDamagable
 	public float GetHealthRatio()
 	{
 		return CurrentHealth / (float)MaxHealth;
+	}
+
+	public void DropItem()
+	{
+		foreach (ItemData item in itemToDrop)
+		{
+			Instantiate(item.dropPrefab, transform.position + new Vector3(1, 1), Quaternion.identity);
+		}
 	}
 }
