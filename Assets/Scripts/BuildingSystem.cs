@@ -6,6 +6,7 @@ public class BuildingSystem : MonoBehaviour
 {
     // 현재 위치를 저장하는 변수
     private Vector3 currentPosition;
+    private Vector3 currentRotation;
 
     // 현재 미리보기 오브젝트의 Transform
     public Transform currentPreview;
@@ -67,7 +68,7 @@ public class BuildingSystem : MonoBehaviour
         }
 
         // 새로운 미리보기 오브젝트 생성
-        GameObject curPrev = Instantiate(item.previewPrefab, currentPosition, Quaternion.identity) as GameObject;
+        GameObject curPrev = Instantiate(item.previewPrefab, currentPosition, Quaternion.Euler(currentRotation)) as GameObject;
         currentPreview = curPrev.transform;
     }
 
@@ -128,8 +129,9 @@ public class BuildingSystem : MonoBehaviour
         currentPosition *= gridSize;
         currentPosition += Vector3.one * offset;
 
-        // 미리보기 오브젝트 위치 설정
+        // 미리보기 오브젝트 위치 및 각도 설정
         currentPreview.position = currentPosition;
+        currentPreview.rotation = Quaternion.Euler(currentRotation);
     }
 
     // 건축 실행
@@ -143,6 +145,7 @@ public class BuildingSystem : MonoBehaviour
             isBuilding = false;
             // 미리보기 오브젝트 삭제
             Destroy(currentPreview.gameObject);
+            currentPreview = null;
         }
     }
 
@@ -150,7 +153,11 @@ public class BuildingSystem : MonoBehaviour
     public void CancelBuilding()
     {
         isBuilding = false;
-        Destroy(currentPreview.gameObject);
+        if (currentPreview != null)
+        {
+            Destroy(currentPreview.gameObject);
+            currentPreview = null;
+        }
         inventory.RestoreSelectedItem();
     }
 
@@ -160,11 +167,17 @@ public class BuildingSystem : MonoBehaviour
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
         if (scrollInput > 0)
         {
-            currentPreview.Rotate(Vector3.up, 90, Space.World);
+            currentRotation += new Vector3(0, 90, 0);
         }
         else if (scrollInput < 0)
         {
-            currentPreview.Rotate(Vector3.up, -90, Space.World);
+            currentRotation -= new Vector3(0, 90, 0);
+        }
+
+        // 미리보기 오브젝트의 회전 적용
+        if (currentPreview != null)
+        {
+            currentPreview.rotation = Quaternion.Euler(currentRotation);
         }
     }
 
